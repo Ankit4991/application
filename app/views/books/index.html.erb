@@ -1,0 +1,54 @@
+
+<body>
+  <br>
+  <div class="id">
+    <h1>Listing books</h1>
+    <br>
+    <%= link_to 'New book', new_book_path %>
+    <%= form_tag @book_path, :method => 'get' do %>
+    <p>  
+    <br>
+    <%= text_field_tag :search %>
+    <%= submit_tag "Search" %>
+  </div>
+  <% end %>
+<br>
+<br>
+<%if @books.present?%>
+  <table>
+    <tr>
+      <br>
+      <th>Title</th>
+      <th>Text</th>
+      <th colspan="2"></th>
+    </tr>    
+    <% @books.each do |book| %>
+      <tr>
+        <td><%= book.title %></td>
+        <td><%= book.text %></td>
+        <td><%= link_to 'Show', book_path(book) %></td> 
+        <% if book.user_id == current_user.id %>
+
+        <td><%= link_to 'Edit', edit_book_path(book) %></td>
+        <% if user_signed_in? %>
+        <td><%= link_to 'Destroy', book_path(book),
+                method: :delete,
+                data: { confirm: 'Are you sure?' } %></td>
+                <% end %>
+         <% end %>       
+      </tr>
+    <% end %>
+  </table>
+<%end%>
+<br>
+<br>
+<% if user_signed_in? %>
+  <li>
+  <%= button_to('Logout', destroy_user_session_path, method: :delete) %>        
+  </li>
+<% else %>
+  <li>
+  <%= link_to('Login', new_user_session_path)  %>  
+  </li>
+<% end %>
+</body>
